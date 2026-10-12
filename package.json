@@ -12,6 +12,7 @@
   ],
   "exports": {
     ".": "./dist/index.js",
+    "./address": "./dist/lib/address.js",
     "./providers/thai-shipping": "./dist/providers/thai-shipping/index.js",
     "./package.json": "./package.json"
   },
@@ -27,7 +28,8 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "build:addresses": "node scripts/build-addresses.mjs"
+    "build:addresses": "node scripts/build-addresses.mjs",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "@medusajs/framework": "^2.0.0"
@@ -38,5 +40,17 @@
     "@types/node": "^26.6.5",
     "typescript": "^7.0.2",
     "vitest": "^5.0.3"
+  },
+  "typesVersions": {
+    "*": {
+      "address": [
+        "dist/lib/address.d.ts"
+      ]
+    }
+  },
+  "peerDependenciesMeta": {
+    "@medusajs/framework": {
+      "optional": true
+    }
   }
 }
