@@ -1,0 +1,42 @@
+{
+  "name": "medusa-thai-shipping",
+  "version": "0.1.0",
+  "description": "Medusa v2 fulfillment provider for Thai shipping: weight-band carrier rates and Thai address validation",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "THIRD_PARTY_LICENSES.md"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./providers/thai-shipping": "./dist/providers/thai-shipping/index.js",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "medusa",
+    "medusajs",
+    "fulfillment",
+    "shipping",
+    "thailand",
+    "thai-address"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build:addresses": "node scripts/build-addresses.mjs"
+  },
+  "peerDependencies": {
+    "@medusajs/framework": "^2.0.0"
+  },
+  "devDependencies": {
+    "@medusajs/framework": "^2.21.2",
+    "@medusajs/types": "^2.21.2",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}
