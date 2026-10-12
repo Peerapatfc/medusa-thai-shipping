@@ -64,7 +64,7 @@ module.exports = defineConfig({
 })
 ```
 
-Then, in Medusa Admin, create shipping options with the **Calculated** price type, choose the fulfillment option (`fp_thai-shipping_thai`) and pick a carrier.
+Then, in Medusa Admin, create shipping options with the **Calculated** price type, choose the fulfillment option (`thai-shipping_thai`) and pick a carrier.
 
 | Option | Meaning |
 |---|---|
@@ -73,6 +73,20 @@ Then, in Medusa Admin, create shipping options with the **Calculated** price typ
 | `carriers[].trackingUrlTemplate` | `{tracking}` is replaced with the tracking number. |
 | `weightUnit` | `g` (default) or `kg`. Missing weights count as 0. |
 | `validateAddress` | Set `false` to skip the address check. Default `true`. |
+
+## Storefront: get the price
+
+Medusa does not return prices for **calculated** options in the shipping option list. Ask for each option's price:
+
+```ts
+const { shipping_options } = await sdk.store.fulfillment.listCartOptions({ cart_id })
+const priced = await Promise.all(
+  shipping_options.map((o) => sdk.store.fulfillment.calculate(o.id, { cart_id }))
+)
+// priced[i].shipping_option.amount, e.g. 40 or 32.5
+```
+
+(REST: `POST /store/shipping-options/:id/calculate` with `{ "cart_id": "..." }`.) Choosing a shipping method then runs the address check, and an invalid postal code or a province that does not match it is rejected with a clear message.
 
 ## Address helpers
 
@@ -90,7 +104,7 @@ District and sub-district are deliberately **not** enforced, because customers w
 
 ## Tracking numbers
 
-When creating a fulfillment, pass `tracking_number` in the additional data. The label's tracking URL is built from the carrier's `trackingUrlTemplate`.
+When creating a fulfillment, pass `tracking_number` in `additional_data` (Admin API: `POST /admin/orders/:id/fulfillments`). The label's tracking URL is built from the carrier's `trackingUrlTemplate`.
 
 ## Data
 
@@ -114,7 +128,7 @@ npm run build
 ## Status
 
 - [x] Unit-tested rate logic, address validation and provider methods
-- [ ] Verified inside a running Medusa instance with shipping options created in Admin
+- [x] Verified in a running Medusa 2.21.2 instance: options created in Admin, prices via `/calculate`, checkout blocked on bad addresses, tracking label stored on the fulfillment
 - [ ] Example storefront (planned: `thai-commerce-storefront`)
 
 ## License
